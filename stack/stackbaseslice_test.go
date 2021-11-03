@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestStackBaseSlice_removeIndex(t *testing.T) {
+func TestStackBaseSlice(t *testing.T) {
 	var stack = NewStackBaseSlice(3)
 	fmt.Println(stack.Push(1))
 	fmt.Println(stack.Push(2))
