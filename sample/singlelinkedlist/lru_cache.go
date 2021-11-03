@@ -1,4 +1,4 @@
-package sample
+package singlelinkedlist
 
 import (
 	"ds_algo/singlelinkedlist"
@@ -14,7 +14,7 @@ func NewLruCache(cap int) *LruCache {
 }
 
 type LruCache struct {
-	cap int // 容量
+	cap  int                                // 容量
 	list *singlelinkedlist.SingleLinkedList // 单向列表
 
 	rl sync.RWMutex // 读写锁
@@ -42,10 +42,8 @@ func (c *LruCache) Get(v interface{}) interface{} {
 
 	c.list.MoveNodeToHead(n)
 
-
 	return n.GetValue()
 }
-
 
 func (c *LruCache) Print() {
 	c.rl.RLock()
@@ -53,5 +51,3 @@ func (c *LruCache) Print() {
 
 	c.list.Print()
 }
-
-
