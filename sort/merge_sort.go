@@ -1,10 +1,10 @@
 package sort
 
-func MergeSort(data []int) int {
-	return mergeSort(data, 0, len(data)-1)
+func MergeSort(data Interface) int {
+	return mergeSort(data, 0, data.Len()-1)
 }
 
-func mergeSort(data []int, start, end int) (cnt int) {
+func mergeSort(data Interface, start, end int) (cnt int) {
 	// 递归终止条件
 	if start >= end {
 		return cnt
@@ -19,9 +19,9 @@ func mergeSort(data []int, start, end int) (cnt int) {
 	return cnt
 }
 
-func merge(data []int, start, mid, end int) (cnt int) {
+func merge(data Interface, start, mid, end int) (cnt int) {
 	var (
-		tmp = make([]int, end-start+1)
+		tmp = make([]interface{}, end-start+1)
 		i   = start
 		j   = mid + 1
 		k   = 0
@@ -29,12 +29,12 @@ func merge(data []int, start, mid, end int) (cnt int) {
 
 	for i <= mid && j <= end {
 		cnt++
-		if data[i] <= data[j] {
-			tmp[k] = data[i]
+		if data.Less(i, j) {
+			tmp[k] = data.Get(i)
 			i++
 			k++
 		} else {
-			tmp[k] = data[j]
+			tmp[k] = data.Get(j)
 			j++
 			k++
 		}
@@ -48,13 +48,13 @@ func merge(data []int, start, mid, end int) (cnt int) {
 	}
 
 	for s <= e {
-		tmp[k] = data[s]
+		tmp[k] = data.Get(s)
 		k++
 		s++
 	}
 
 	for i := 0; i <= end-start; i++ {
-		data[start+i] = tmp[i]
+		data.Set(start+i, tmp[i])
 	}
 
 	return cnt
