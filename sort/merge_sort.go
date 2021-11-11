@@ -10,16 +10,21 @@ func mergeSort(data Interface, start, end int) (cnt int) {
 		return cnt
 	}
 
+	// 分治递归
 	var mid = (start + end) / 2
 	cnt += mergeSort(data, start, mid)
 	cnt += mergeSort(data, mid+1, end)
 
+	// 结果合并
 	cnt += merge(data, start, mid, end)
 
 	return cnt
 }
 
 func merge(data Interface, start, mid, end int) (cnt int) {
+
+	// 开始比较 start->mid, mid->end 的数据
+	// 有序的塞进tmp
 	var (
 		tmp = make([]interface{}, end-start+1)
 		i   = start
@@ -40,6 +45,8 @@ func merge(data Interface, start, mid, end int) (cnt int) {
 		}
 	}
 
+	// 将剩余未塞入tmp的数据继续塞入
+	// 先确定 start->mid 未执行完 还是 mid->end未执行完
 	var s = i
 	var e = mid
 	if j <= end {
@@ -47,12 +54,14 @@ func merge(data Interface, start, mid, end int) (cnt int) {
 		e = end
 	}
 
+	// 将剩余的数据塞入tmp
 	for s <= e {
 		tmp[k] = data.Get(s)
 		k++
 		s++
 	}
 
+	// 把tmp中的数据有序的合并进data
 	for i := 0; i <= end-start; i++ {
 		data.Set(start+i, tmp[i])
 	}
