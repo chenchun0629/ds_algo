@@ -1,29 +1,24 @@
 package sort
 
-import (
-	"sort"
-)
+import "sort"
 
 type Interface interface {
 	sort.Interface
 
-	Divide() (Interface, Interface)
-	Merge(q Interface) Interface
+	Get(i int) interface{}
+	Set(i int, v interface{})
 }
 
 type IntSlice []int
 
+func (x IntSlice) Set(i int, v interface{}) {
+	x[i] = v.(int)
+}
+
+func (x IntSlice) Get(i int) interface{} {
+	return x[i]
+}
+
 func (x IntSlice) Len() int           { return len(x) }
 func (x IntSlice) Less(i, j int) bool { return x[i] < x[j] }
 func (x IntSlice) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
-
-func (x IntSlice) Divide() (Interface, Interface) {
-	var hl = len(x) / 2
-	var q = (x)[hl:]
-	x = (x)[:hl:hl]
-	return x, q
-}
-
-func (x IntSlice) Merge(q Interface) Interface {
-	return append(x, q.(IntSlice)...)
-}
