@@ -1,10 +1,12 @@
 package sort
 
-func QuickSort(data Interface) int {
+import "sort"
+
+func QuickSort(data sort.Interface) int {
 	return quickSort(data, 0, data.Len()-1)
 }
 
-func quickSort(data Interface, start, end int) int {
+func quickSort(data sort.Interface, start, end int) int {
 	// 终止递归条件
 	if start >= end {
 		return 0
@@ -20,7 +22,7 @@ func quickSort(data Interface, start, end int) int {
 	return cnt
 }
 
-func partition(data Interface, start, end int) (mid int, cnt int) {
+func partition(data sort.Interface, start, end int) (mid int, cnt int) {
 	// 设中间点mid为起点， 并且 拿最后一个值data[end]为标杆 进行比较
 	// 从start开始遍历  与标杆进行data[end]比较
 	// 如果 当前值 data[start] < 标杆 data[end]，
