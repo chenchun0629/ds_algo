@@ -1,7 +1,7 @@
 package binarysearch
 
-func BinarySearch(data []int, t int) int {
-	var l = len(data)
+func BinarySearch(data Searchable, t int) int {
+	var l = data.Len()
 	if l <= 0 {
 		return -1
 	}
@@ -9,15 +9,16 @@ func BinarySearch(data []int, t int) int {
 	return binarySearch(data, 0, l-1, t)
 }
 
-func binarySearch(data []int, b, e, t int) int {
+func binarySearch(data Searchable, b, e, t int) int {
 	if b > e {
 		return -1
 	}
 
 	var mid = (b + e) / 2
-	if data[mid] == t {
+	var c = data.Compare(mid, t)
+	if c == 0 {
 		return mid
-	} else if t > data[mid] {
+	} else if c > 0 {
 		return binarySearch(data, mid+1, e, t)
 	}
 
