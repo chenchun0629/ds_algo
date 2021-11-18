@@ -6,28 +6,22 @@ import (
 	"time"
 )
 
-const (
-	MAX_LEVEL          = 16  //最高层数
-	SKIPLIST_P float64 = 0.5 // 允许生成下一级的百分比
-)
-
 type Node struct {
-	Value    int
-	Next     []*Node
-	MaxLevel int
+	Value Nodable
+	Next  []*Node
 }
 
-func NewNode(value int, maxLevel int) *Node {
+func NewNode(value Nodable, maxLevel int) *Node {
 	return &Node{
-		Value:    value,
-		MaxLevel: maxLevel,
-		Next:     make([]*Node, MAX_LEVEL),
+		Value: value,
+		Next:  make([]*Node, maxLevel),
 	}
 }
 
-func NewSkipList() *SkipList {
+func NewSkipList(maxLevel int) *SkipList {
 	return &SkipList{
-		head:            NewNode(-1, MAX_LEVEL),
+		head:            NewNode(nil, maxLevel),
+		maxLevel:        maxLevel,
 		currentMaxLevel: 1,
 		rand:            rand.New(rand.NewSource(time.Now().UnixNano())),
 	}
@@ -36,15 +30,16 @@ func NewSkipList() *SkipList {
 type SkipList struct {
 	head *Node
 
+	maxLevel        int
 	currentMaxLevel int
 	rand            *rand.Rand
 }
 
-func (l *SkipList) Get(value int) *Node {
+func (l *SkipList) Get(value Nodable) *Node {
 	var p = l.head
 	// 从上层开始遍历
 	for i := l.currentMaxLevel; i >= 0; i-- {
-		for ; p.Next[i] != nil && p.Next[i].Value < value; p = p.Next[i] {
+		for ; p.Next[i] != nil && p.Next[i].Value.Compare(value) < 0; p = p.Next[i] {
 		}
 	}
 
@@ -54,7 +49,7 @@ func (l *SkipList) Get(value int) *Node {
 	return nil
 }
 
-func (l *SkipList) Remove(value int) {
+func (l *SkipList) Remove(value Nodable) {
 	var (
 		update = make([]*Node, l.currentMaxLevel)
 		p      = l.head
@@ -62,7 +57,7 @@ func (l *SkipList) Remove(value int) {
 
 	// 从上层开始遍历
 	for i := l.currentMaxLevel - 1; i >= 0; i-- {
-		for ; p.Next[i] != nil && p.Next[i].Value < value; p = p.Next[i] {
+		for ; p.Next[i] != nil && p.Next[i].Value.Compare(value) < 0; p = p.Next[i] {
 		}
 		update[i] = p
 	}
@@ -84,7 +79,7 @@ func (l *SkipList) Remove(value int) {
 
 }
 
-func (l *SkipList) Set(value int) {
+func (l *SkipList) Set(value Nodable) {
 	var (
 		lvl    = l.randomMaxLevel()  // 当前内容索引等级
 		node   = NewNode(value, lvl) // 当前内容节点
@@ -100,7 +95,7 @@ func (l *SkipList) Set(value int) {
 	var p = l.head
 	for i := lvl - 1; i >= 0; i-- {
 		// 第i层索引不为空，并且第i层索引的值小于插入的值
-		for p.Next[i] != nil && p.Next[i].Value < value {
+		for p.Next[i] != nil && p.Next[i].Value.Compare(value) < 0 {
 			p = p.Next[i] // 节点p就滑动到下一个
 		}
 		update[i] = p
@@ -128,7 +123,7 @@ func (l *SkipList) Set(value int) {
 func (l SkipList) randomMaxLevel() int {
 	const prob = 1 << 30 // Half of 2^31.
 	var (
-		estimated = MAX_LEVEL
+		estimated = l.maxLevel
 		rd        = l.rand
 		lvl       = 1
 	)
@@ -146,8 +141,8 @@ func (l SkipList) Print() {
 	for i := 0; i < l.currentMaxLevel; i++ {
 		fmt.Printf("第%d层： ", i)
 		for p := l.head; p != nil; p = p.Next[i] {
-			fmt.Printf("%d \t", p.Value)
+			fmt.Printf("%#v \t", p.Value)
 		}
-		fmt.Println("。")
+		fmt.Println()
 	}
 }
