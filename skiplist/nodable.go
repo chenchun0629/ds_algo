@@ -8,17 +8,14 @@ type Nodable interface {
 type IntNode int
 
 func (i IntNode) Compare(v Nodable) int {
-	if d, ok := v.(IntNode); ok {
-		if i > d {
-			return 1
-		} else if i == d {
-			return 0
-		}
-
-		return -1
+	if i.Weight() > v.Weight() {
+		return 1
+	} else if i.Weight() == v.Weight() {
+		return 0
 	}
 
-	panic("Nodable v's type is not IntNode")
+	return -1
+
 }
 
 func (i IntNode) Weight() int {
