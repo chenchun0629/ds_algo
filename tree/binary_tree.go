@@ -13,6 +13,17 @@ func NewBinaryTree(rootV interface{}) *BinaryTree {
 	return &BinaryTree{NewNode(rootV)}
 }
 
+//四种主要的遍历思想为：
+//
+//前序遍历：根结点 ---> 左子树 ---> 右子树（深度优先遍历）
+//
+//中序遍历：左子树---> 根结点 ---> 右子树（深度优先遍历）
+//
+//后序遍历：左子树 ---> 右子树 ---> 根结点（深度优先遍历）
+//
+//层次遍历：只需按层次遍历即可（广度优先遍历）
+
+// 中序遍历
 func (this *BinaryTree) InOrderTraverse() {
 	p := this.root
 
@@ -31,6 +42,7 @@ func (this *BinaryTree) InOrderTraverse() {
 	fmt.Println()
 }
 
+// 前序遍历
 func (this *BinaryTree) PreOrderTraverse() {
 	p := this.root
 	s := stack.NewStackBaseList(99999)
@@ -48,6 +60,7 @@ func (this *BinaryTree) PreOrderTraverse() {
 	fmt.Println()
 }
 
+// 后序遍历
 func (this *BinaryTree) PostOrderTraverse() {
 	s1 := stack.NewStackBaseList(99999)
 	s2 := stack.NewStackBaseList(99999)
@@ -66,6 +79,28 @@ func (this *BinaryTree) PostOrderTraverse() {
 	for !s2.IsEmpty() {
 		fmt.Printf("%+v ", s2.Pop().(*Node).data)
 	}
+
+	fmt.Println()
+}
+
+// 广度优先
+func (this *BinaryTree) BreadthFirstSearch() {
+	var nodes = make([]*Node, 0)
+	nodes = append(nodes, this.root)
+
+	for len(nodes) > 0 {
+		p := nodes[0]
+		nodes = nodes[1:]
+		fmt.Printf("%d ", p.data)
+
+		if p.left != nil {
+			nodes = append(nodes, p.left)
+		}
+		if p.right != nil {
+			nodes = append(nodes, p.right)
+		}
+	}
+	fmt.Println()
 }
 
 //use one stack, pre cursor to traverse from post order
