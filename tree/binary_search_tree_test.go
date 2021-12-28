@@ -6,11 +6,11 @@ import (
 )
 
 func TestBST_Find(t *testing.T) {
-	bst := NewBST(1, IntCompareFunc)
+	bst := NewBST(4, IntCompareFunc)
 
 	bst.Insert(2)
 	bst.Insert(3)
-	bst.Insert(4)
+	bst.Insert(1)
 	bst.Insert(5)
 	bst.Insert(6)
 	bst.Insert(7)

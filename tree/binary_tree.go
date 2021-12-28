@@ -25,61 +25,62 @@ func NewBinaryTree(rootV interface{}) *BinaryTree {
 
 // 中序遍历
 func (this *BinaryTree) InOrderTraverse() {
-	p := this.root
+	var (
+		inOrder func(p *Node)
+	)
 
-	s := stack.NewStackBaseList(99999)
-
-	for !s.IsEmpty() || nil != p {
-		if nil != p {
-			s.Push(p)
-			p = p.left
-		} else {
-			tmp := s.Pop().(*Node)
-			fmt.Printf("%+v ", tmp.data)
-			p = tmp.right
+	inOrder = func(p *Node) {
+		if p == nil {
+			return
 		}
+
+		inOrder(p.left)
+		fmt.Print(p.data, " ")
+		inOrder(p.right)
 	}
+
+	inOrder(this.root)
+
 	fmt.Println()
 }
 
 // 前序遍历
 func (this *BinaryTree) PreOrderTraverse() {
-	p := this.root
-	s := stack.NewStackBaseList(99999)
+	var (
+		preOrder func(p *Node)
+	)
 
-	for !s.IsEmpty() || nil != p {
-		if nil != p {
-			fmt.Printf("%+v ", p.data)
-			s.Push(p)
-			p = p.left
-		} else {
-			p = s.Pop().(*Node).right
+	preOrder = func(p *Node) {
+		if p == nil {
+			return
 		}
+
+		fmt.Print(p.data, " ")
+		preOrder(p.left)
+		preOrder(p.right)
 	}
 
+	preOrder(this.root)
 	fmt.Println()
 }
 
 // 后序遍历
 func (this *BinaryTree) PostOrderTraverse() {
-	s1 := stack.NewStackBaseList(99999)
-	s2 := stack.NewStackBaseList(99999)
-	s1.Push(this.root)
-	for !s1.IsEmpty() {
-		p := s1.Pop().(*Node)
-		s2.Push(p)
-		if nil != p.left {
-			s1.Push(p.left)
+	var (
+		postOrder func(p *Node)
+	)
+
+	postOrder = func(p *Node) {
+		if p == nil {
+			return
 		}
-		if nil != p.right {
-			s1.Push(p.right)
-		}
+
+		postOrder(p.left)
+		postOrder(p.right)
+		fmt.Print(p.data, " ")
 	}
 
-	for !s2.IsEmpty() {
-		fmt.Printf("%+v ", s2.Pop().(*Node).data)
-	}
-
+	postOrder(this.root)
 	fmt.Println()
 }
 
