@@ -33,6 +33,14 @@ func (l *StackBaseList) Pop() interface{} {
 	return e.Value
 }
 
+func (l StackBaseList) IsEmpty() bool {
+	return l.list.Len() == 0
+}
+
+func (l StackBaseList) Top() interface{} {
+	return l.list.Front()
+}
+
 func (l *StackBaseList) Print() {
 	var i = make([]interface{}, 0)
 	for e := l.list.Front(); e != nil; e = e.Next() {
